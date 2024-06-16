@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Jugadores{% endblock %}
+{% block body_class %}bg-jugadores{% endblock %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <li>{{ message }}</li>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endwith %}
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">Lista de Jugadores</h5>
+
+            <!-- Botón para abrir modal de agregar jugador -->
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarJugador">Agregar Jugador</button>
+
+            <!-- Tabla de jugadores -->
+            <table class="table table-bordered table-striped table-hover" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Edad</th>
+                        <th scope="col">Nacionalidad</th>
+                        <th scope="col">Posición</th>
+                        <th scope="col">Equipo</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for jugador in jugadores %}
+                        <tr>
+                            <td>{{ jugador.idjugador }}</td>
+                            <td>{{ jugador.nombrejugador }}</td>
+                            <td>{{ jugador.edad }}</td>
+                            <td>{{ jugador.nacionalidad }}</td>
+                            <td>{{ jugador.posicion.nombreposicion }}</td>
+                            <td>{{ jugador.equipo.nombreequipo }}</td>
+                            <td>
+                                <a href="{{ url_for('editar_jugador', idjugador=jugador.idjugador) }}" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarJugador{{ jugador.idjugador }}">Editar</a>
+                                <form action="{{ url_for('eliminar_jugador', idjugador=jugador.idjugador) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <!-- Modal para editar jugador -->
+                        <div class="modal fade" id="modalEditarJugador{{ jugador.idjugador }}" tabindex="-1" aria-labelledby="modalEditarJugadorLabel{{ jugador.idjugador }}" aria-hidden="true">
+                          <div class="modal-dialog">
+                              <div class="modal-content">
+                                  <form method="post" action="{{ url_for('editar_jugador', idjugador=jugador.idjugador) }}">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="modalEditarJugadorLabel{{ jugador.idjugador }}">Editar Jugador</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <div class="modal-body">
+                                          <div class="mb-3">
+                                              <label for="nombrejugador" class="form-label">Nombre</label>
+                                              <input type="text" class="form-control" id="nombrejugador" name="nombrejugador" value="{{ jugador.nombrejugador }}" required>
+                                          </div>
+                                          <div class="mb-3">
+                                              <label for="edad" class="form-label">Edad</label>
+                                              <input type="number" class="form-control" id="edad" name="edad" value="{{ jugador.edad }}" required>
+                                          </div>
+                                          <div class="mb-3">
+                                              <label for="nacionalidad" class="form-label">Nacionalidad</label>
+                                              <input type="text" class="form-control" id="nacionalidad" name="nacionalidad" value="{{ jugador.nacionalidad }}" required>
+                                          </div>
+                                          <div class="mb-3">
+                                              <label for="idposicion" class="form-label">Posición</label>
+                                              <select class="form-select" id="idposicion" name="idposicion" required>
+                                                  {% for posicion in posiciones %}
+                                                      <option value="{{ posicion.idposicion }}" {% if jugador.idposicion == posicion.idposicion %}selected{% endif %}>{{ posicion.nombreposicion }}</option>
+                                                  {% endfor %}
+                                              </select>
+                                          </div>
+                                          <div class="mb-3">
+                                              <label for="idequipo" class="form-label">Equipo</label>
+                                              <select class="form-select" id="idequipo" name="idequipo" required>
+                                                  {% for equipo in equipos %}
+                                                      <option value="{{ equipo.idequipo }}" {% if jugador.idequipo == equipo.idequipo %}selected{% endif %}>{{ equipo.nombreequipo }}</option>
+                                                  {% endfor %}
+                                              </select>
+                                          </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                      </div>
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar jugador -->
+<div class="modal fade" id="modalAgregarJugador" tabindex="-1" aria-labelledby="modalAgregarJugadorLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('agregar_jugador') }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarJugadorLabel">Agregar Jugador</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nombrejugador" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombrejugador" name="nombrejugador" required>
+          </div>
+          <div class="mb-3">
+            <label for="edad" class="form-label">Edad</label>
+            <input type="number" class="form-control" id="edad" name="edad" required>
+          </div>
+          <div class="mb-3">
+            <label for="nacionalidad" class="form-label">Nacionalidad</label>
+            <input type="text" class="form-control" id="nacionalidad" name="nacionalidad" required>
+          </div>
+          <div class="mb-3">
+            <label for="idposicion" class="form-label">Posición</label>
+            <select class="form-control" id="idposicion" name="idposicion" required>
+              {% for posicion in posiciones %}
+              <option value="{{ posicion.idposicion }}">{{ posicion.nombreposicion }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="idequipo" class="form-label">Equipo</label>
+            <select class="form-control" id="idequipo" name="idequipo" required>
+              {% for equipo in equipos %}
+              <option value="{{ equipo.idequipo }}">{{ equipo.nombreequipo }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Equipos{% endblock %}
+{% block body_class %}bg-equipos{% endblock %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <li>{{ message }}</li>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endwith %}
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">Lista de Equipos</h5>
+
+            <!-- Botón para abrir modal de agregar equipo -->
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarEquipo">Agregar Equipo</button>
+
+            <!-- Tabla de equipos -->
+            <table class="table table-bordered table-striped table-hover" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Año de Fundación</th>
+                        <th scope="col">Estadio</th>
+                        <th scope="col">Ciudad</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for equipo in equipos %}
+                        <tr>
+                            <td>{{ equipo.idequipo }}</td>
+                            <td>{{ equipo.nombreequipo }}</td>
+                            <td>{{ equipo.anioofundacion }}</td>
+                            <td>{{ equipo.estadio }}</td>
+                            <td>{{ equipo.ciudad }}</td>
+                            <td>
+                                <a href="{{ url_for('editar_equipo', idequipo=equipo.idequipo) }}" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarEquipo{{ equipo.idequipo }}">Editar</a>
+                                <form action="{{ url_for('eliminar_equipo', idequipo=equipo.idequipo) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        <!-- Modal para editar equipo -->
+                        <div class="modal fade" id="modalEditarEquipo{{ equipo.idequipo }}" tabindex="-1" aria-labelledby="modalEditarEquipoLabel{{ equipo.idequipo }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" action="{{ url_for('editar_equipo', idequipo=equipo.idequipo) }}">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalEditarEquipoLabel{{ equipo.idequipo }}">Editar Equipo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="nombreequipo" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="nombreequipo" name="nombreequipo" value="{{ equipo.nombreequipo }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="anioofundacion" class="form-label">Año de Fundación</label>
+                                                <input type="text" class="form-control" id="anioofundacion" name="anioofundacion" value="{{ equipo.anioofundacion }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="estadio" class="form-label">Estadio</label>
+                                                <input type="text" class="form-control" id="estadio" name="estadio" value="{{ equipo.estadio }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="ciudad" class="form-label">Ciudad</label>
+                                                <input type="text" class="form-control" id="ciudad" name="ciudad" value="{{ equipo.ciudad }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar equipo -->
+<div class="modal fade" id="modalAgregarEquipo" tabindex="-1" aria-labelledby="modalAgregarEquipoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('agregar_equipo') }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarEquipoLabel">Agregar Equipo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nombreequipo" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombreequipo" name="nombreequipo" required>
+          </div>
+          <div class="mb-3">
+            <label for="anioofundacion" class="form-label">Año de Fundación</label>
+            <input type="text" class="form-control" id="anioofundacion" name="anioofundacion" required>
+          </div>
+          <div class="mb-3">
+            <label for="estadio" class="form-label">Estadio</label>
+            <input type="text" class="form-control" id="estadio" name="estadio" required>
+          </div>
+          <div class="mb-3">
+            <label for="ciudad" class="form-label">Ciudad</label>
+            <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  // Aquí puedes añadir cualquier script necesario para el manejo del modal u otras funcionalidades
+</script>
+{% endblock javascripts %}
+

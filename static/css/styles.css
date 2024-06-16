@@ -1,0 +1,140 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url('../images/background.jpg');
+    background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+
+}
+
+.content {
+    flex: 1;
+}
+/* Estilos para las tablas */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+.table-hover tbody tr:hover {
+    color: #495057;
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered th, .table-bordered td {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered thead th, .table-bordered thead td {
+    border-bottom-width: 2px;
+}
+
+/* Estilos personalizados para hacer la tabla más futbolera */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 123, 255, 0.1); /* Color azul claro */
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: rgba(255, 255, 255, 0.1); /* Color blanco claro */
+}
+
+.table thead {
+    background-color: #007bff; /* Color de fondo azul oscuro */
+    color: white; /* Color del texto blanco */
+}
+
+.table th {
+    text-align: center;
+}
+
+.table td {
+    text-align: center;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #ffc107; /* Color amarillo para el hover */
+    color: black; /* Color del texto negro */
+}
+/* Estilos para el pie de página */
+.bg-football {
+    background-color: rgba(0, 123, 255, 0.8); /* Color azul claro con transparencia */
+    color: white;
+}
+
+.bg-football p {
+    margin: 0;
+}
+/* Estilo para la página de jugadores con una imagen de fondo específica */
+.bg-jugadores {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url('../images/jugador.jpeg');
+    background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+
+}
+
+/* Opcional: para asegurar que el contenido de la página sea visible */
+.content {
+    position: relative;
+    z-index: 1;
+}
+/* Estilo para la página de equipos con una imagen de fondo específica */
+.bg-equipos {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url('../images/equipo.jpeg');
+    background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+
+}
+
+/* Opcional: para asegurar que el contenido de la página sea visible */
+.content {
+    position: relative;
+    z-index: 1;
+}
+/* Estilo para la página de posiciones con una imagen de fondo específica */
+.bg-posiciones {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url('../images/posicion.jpeg');
+    background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+
+}
+
+/* Opcional: para asegurar que el contenido de la página sea visible */
+.content {
+    position: relative;
+    z-index: 1;
+}

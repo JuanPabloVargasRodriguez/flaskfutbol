@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Posiciones{% endblock %}
+{% block body_class %}bg-posiciones{% endblock %}
+{% block content %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <li>{{ message }}</li>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <div class="container">
+    <div class="card shadow">
+      <div class="card-body">
+        <h5 class="card-title">Lista de Posiciones</h5>
+
+        <!-- Botón para abrir modal de agregar posición -->
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAgregarPosicion">
+          <i class="bi bi-plus-circle"></i> Agregar Posición
+        </button>
+
+
+
+
+        <!-- Tabla de posiciones -->
+        <table class="table table-bordered table-striped table-hover" id="dataTable">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for posicion in posiciones %}
+              <tr>
+                <td>{{ posicion.idposicion }}</td>
+                <td>{{ posicion.nombreposicion }}</td>
+                <td>{{ posicion.descripcion }}</td>
+                <td>
+                  <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarPosicion{{ posicion.idposicion }}">
+                    <i class="bi bi-pencil-square"></i> Editar
+                  </a>
+                  <form action="{{ url_for('eliminar_posicion', idposicion=posicion.idposicion) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                  </form>
+                </td>
+              </tr>
+
+              <!-- Modal para editar posición -->
+              <div class="modal fade" id="modalEditarPosicion{{ posicion.idposicion }}" tabindex="-1" aria-labelledby="modalEditarPosicionLabel{{ posicion.idposicion }}" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <form method="post" action="{{ url_for('editar_posicion', idposicion=posicion.idposicion) }}">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarPosicionLabel{{ posicion.idposicion }}">Editar Posición</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="nombreposicion{{ posicion.idposicion }}" class="form-label">Nombre</label>
+                          <input type="text" class="form-control" id="nombreposicion{{ posicion.idposicion }}" name="nombreposicion" value="{{ posicion.nombreposicion }}" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="descripcion{{ posicion.idposicion }}" class="form-label">Descripción</label>
+                          <textarea class="form-control" id="descripcion{{ posicion.idposicion }}" name="descripcion" required>{{ posicion.descripcion }}</textarea>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                          <i class="bi bi-x-circle"></i> Cerrar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                          <i class="bi bi-check-circle"></i> Guardar
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal para agregar posición -->
+  <div class="modal fade" id="modalAgregarPosicion" tabindex="-1" aria-labelledby="modalAgregarPosicionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="post" action="{{ url_for('agregar_posicion') }}">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalAgregarPosicionLabel">Agregar Posición</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="nombreposicion" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombreposicion" name="nombreposicion" required>
+            </div>
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle"></i> Cerrar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-circle"></i> Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
